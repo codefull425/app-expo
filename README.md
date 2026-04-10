@@ -56,7 +56,7 @@ $env:PORT=4000; npm run api
 ### Dados e endpoints úteis
 
 - O “base de dados” é **`cantina-expo/server.json`** (categorias e itens).
-- A app obtém o catálogo com **`GET /categories`** (pedidos a `/items` são redirecionados internamente para a mesma estrutura).
+- A app obtém o catálogo com **`GET /categories`** ).
 - **Editar** e **excluir** itens fazem `GET` da categoria, alteram o array `items` em memória e gravam com **`PUT /categories/:id`**, como o json-server espera.
 
 ---
@@ -97,7 +97,7 @@ $env:EXPO_PUBLIC_API_CATALOG_PATH="/categories"; npm start
 
 ### Listar (dois modos)
 
-1. **Cardápio do restaurante** (grelha com imagens)  
+1. **Cardápio do restaurante** (grid com imagens)  
    - Os itens aparecem em grid, agrupados por categoria.
 
 2. **Listagem** (vista em lista, sem ícones de editar/lixo)  
@@ -135,7 +135,7 @@ Ficheiros em `cantina-expo/src/components/` e ecrã principal:
 | **`AppHeader`** | Barra superior com logótipo e botão de **menu** (hamburger) que abre/fecha a sidebar. |
 | **`MobileSidebar`** | Painel lateral animado com atalhos para **Cardápio** e **Listagem**; o ecrã reage aos toques e fecha o painel. |
 | **`CategoryHeading`** | Título de secção com linhas laterais para cada **categoria** no scroll. |
-| **`ItemCard`** | Cartão na grelha: imagem, nome, preço, descrição; toque no cartão abre detalhe; ícones **editar** e **lixeira** disparam edição e exclusão. |
+| **`ItemCard`** | Cartão na grid: imagem, nome, preço, descrição; toque no cartão abre detalhe; ícones **editar** e **lixeira** disparam edição e exclusão. |
 | **`CatalogListingCard`** | Linha compacta na vista **Listagem** (nome, descrição, preço); toque abre o detalhe. |
 | **`ProductDetailModal`** | Modal só de leitura com foto, nome, preço e descrição do item selecionado. |
 | **`EditItemModal`** | Modal com formulário que chama `updateCatalogItem` e invalida a query do catálogo após gravar. |
