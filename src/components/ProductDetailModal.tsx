@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import React, { useEffect, useState } from 'react';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+
 import { ITEM_IMAGE_FALLBACK } from '../constants/itemImageFallback';
 import { colors, fonts } from '../constants/theme';
 
@@ -30,66 +31,42 @@ export function ProductDetailModal({
   const useRemote = trimmed.length > 0 && !remoteFailed;
   const source = useRemote ? { uri: trimmed } : ITEM_IMAGE_FALLBACK;
 
-  return React.createElement(
-    Modal,
-    {
-      visible,
-      transparent: true,
-      animationType: 'fade' as const,
-      onRequestClose: onClose,
-    },
-    React.createElement(
-      View,
-      { style: styles.centerWrap },
-      React.createElement(Pressable, {
-        style: StyleSheet.absoluteFill,
-        onPress: onClose,
-        accessibilityLabel: 'Fechar ao tocar fora',
-      }),
-      React.createElement(
-        View,
-        {
-          style: styles.modalFrame,
-          accessibilityLabel: name,
-        },
-        React.createElement(
-          View,
-          { style: styles.modalInner },
-          React.createElement(
-            Pressable,
-            {
-              onPress: onClose,
-              style: styles.closeBtn,
-              hitSlop: 12,
-              accessibilityLabel: 'Fechar',
-            },
-            React.createElement(Ionicons, {
-              name: 'close',
-              size: 22,
-              color: colors.primaryGreen,
-            }),
-          ),
-          React.createElement(Text, { style: styles.title }, name),
-          React.createElement(
-            View,
-            { style: styles.photoWrap },
-            React.createElement(Image, {
-              source,
-              style: styles.photo,
-              contentFit: 'contain' as const,
-              onError: () => setRemoteFailed(true),
-            }),
-          ),
-          React.createElement(Text, { style: styles.desc }, description),
-          React.createElement(Text, { style: styles.price }, price),
-          React.createElement(
-            Pressable,
-            { style: styles.cta, onPress: onClose },
-            React.createElement(Text, { style: styles.ctaText }, 'Fechar'),
-          ),
-        ),
-      ),
-    ),
+  return (
+    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
+      <View style={styles.centerWrap}>
+        <Pressable
+          style={StyleSheet.absoluteFill}
+          onPress={onClose}
+          accessibilityLabel="Fechar ao tocar fora"
+        />
+        <View style={styles.modalFrame} accessibilityLabel={name}>
+          <View style={styles.modalInner}>
+            <Pressable
+              onPress={onClose}
+              style={styles.closeBtn}
+              hitSlop={12}
+              accessibilityLabel="Fechar"
+            >
+              <Ionicons name="close" size={22} color={colors.primaryGreen} />
+            </Pressable>
+            <Text style={styles.title}>{name}</Text>
+            <View style={styles.photoWrap}>
+              <Image
+                source={source}
+                style={styles.photo}
+                contentFit="contain"
+                onError={() => setRemoteFailed(true)}
+              />
+            </View>
+            <Text style={styles.desc}>{description}</Text>
+            <Text style={styles.price}>{price}</Text>
+            <Pressable style={styles.cta} onPress={onClose}>
+              <Text style={styles.ctaText}>Fechar</Text>
+            </Pressable>
+          </View>
+        </View>
+      </View>
+    </Modal>
   );
 }
 
@@ -101,7 +78,6 @@ const styles = StyleSheet.create({
     padding: 24,
     backgroundColor: 'rgba(0,0,0,0.35)',
   },
-  /** Anel verde de 3px: borda inferior não some com borderRadius no RN. */
   modalFrame: {
     width: '100%',
     maxWidth: 293,
@@ -115,7 +91,7 @@ const styles = StyleSheet.create({
     paddingTop: 24,
     paddingHorizontal: 20,
     paddingBottom: 20,
-    overflow: 'hidden' as const,
+    overflow: 'hidden',
   },
   closeBtn: {
     position: 'absolute',
@@ -132,7 +108,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '700',
     color: colors.primaryGreen,
-    textAlign: 'center' as const,
+    textAlign: 'center',
   },
   photoWrap: {
     width: 150,
@@ -153,7 +129,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '500',
     color: colors.darkGray,
-    textAlign: 'center' as const,
+    textAlign: 'center',
     lineHeight: 16,
   },
   price: {

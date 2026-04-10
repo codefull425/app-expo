@@ -2,6 +2,7 @@ import { Image } from 'expo-image';
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 import { FIGMA_ASSETS } from '../constants/figmaAssets';
 import { hamburgerMenu } from '../constants/localImages';
 import { colors, layout } from '../constants/theme';
@@ -19,63 +20,57 @@ const headerInnerFrame = {
 
 export function AppHeader({ menuExpanded, onMenuPress }: Props): React.ReactElement {
   const insets = useSafeAreaInsets();
-  return React.createElement(
-    View,
-    { style: [styles.headerOuter, { paddingTop: insets.top }] },
-    React.createElement(
-      View,
-      { style: [styles.headerInner, headerInnerFrame] },
-      React.createElement(
-        Pressable,
-        {
-          style: styles.iconBtn,
-          onPress: onMenuPress,
-          accessibilityLabel: 'Menu',
-          accessibilityRole: 'button',
-          accessibilityState: { expanded: menuExpanded },
-          hitSlop: { top: 8, bottom: 8, left: 8, right: 8 },
-        },
-        React.createElement(Image, {
-          source: hamburgerMenu,
-          style: styles.hamburgerImg,
-          contentFit: 'contain' as const,
-          accessibilityIgnoresInvertColors: true,
-        }),
-      ),
-      React.createElement(
-        View,
-        { style: styles.logoWrap },
-        React.createElement(Image, {
-          source: { uri: FIGMA_ASSETS.logoCantina },
-          style: styles.logoImg,
-          contentFit: 'contain' as const,
-          accessibilityLabel: 'Cantina',
-        }),
-      ),
-      React.createElement(
-        View,
-        { style: styles.profile, accessibilityElementsHidden: true, importantForAccessibility: 'no-hide-descendants' as const },
-        React.createElement(Image, {
-          source: { uri: FIGMA_ASSETS.avatarRing },
-          style: styles.avatarRing,
-          contentFit: 'contain' as const,
-        }),
-        React.createElement(
-          View,
-          { style: styles.avatarChip },
-          React.createElement(Image, {
-            source: { uri: FIGMA_ASSETS.avatarMask },
-            style: styles.avatarPhoto,
-            contentFit: 'cover' as const,
-          }),
-        ),
-        React.createElement(Image, {
-          source: { uri: FIGMA_ASSETS.avatarIcon },
-          style: styles.avatarChevron,
-          contentFit: 'contain' as const,
-        }),
-      ),
-    ),
+  return (
+    <View style={[styles.headerOuter, { paddingTop: insets.top }]}>
+      <View style={[styles.headerInner, headerInnerFrame]}>
+        <Pressable
+          style={styles.iconBtn}
+          onPress={onMenuPress}
+          accessibilityLabel="Menu"
+          accessibilityRole="button"
+          accessibilityState={{ expanded: menuExpanded }}
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+        >
+          <Image
+            source={hamburgerMenu}
+            style={styles.hamburgerImg}
+            contentFit="contain"
+            accessibilityIgnoresInvertColors
+          />
+        </Pressable>
+        <View style={styles.logoWrap}>
+          <Image
+            source={{ uri: FIGMA_ASSETS.logoCantina }}
+            style={styles.logoImg}
+            contentFit="contain"
+            accessibilityLabel="Cantina"
+          />
+        </View>
+        <View
+          style={styles.profile}
+          accessibilityElementsHidden
+          importantForAccessibility="no-hide-descendants"
+        >
+          <Image
+            source={{ uri: FIGMA_ASSETS.avatarRing }}
+            style={styles.avatarRing}
+            contentFit="contain"
+          />
+          <View style={styles.avatarChip}>
+            <Image
+              source={{ uri: FIGMA_ASSETS.avatarMask }}
+              style={styles.avatarPhoto}
+              contentFit="cover"
+            />
+          </View>
+          <Image
+            source={{ uri: FIGMA_ASSETS.avatarIcon }}
+            style={styles.avatarChevron}
+            contentFit="contain"
+          />
+        </View>
+      </View>
+    </View>
   );
 }
 

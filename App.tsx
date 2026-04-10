@@ -11,6 +11,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useMemo } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+
 import { CardapioScreen } from './src/screens/CardapioScreen';
 
 const queryClient = new QueryClient();
@@ -27,26 +28,22 @@ export default function App(): React.ReactElement | null {
   const client = useMemo(() => queryClient, []);
 
   if (!fontsLoaded && !fontError) {
-    return React.createElement(
-      View,
-      { style: styles.boot },
-      React.createElement(ActivityIndicator, { size: 'large', color: '#008267' }),
+    return (
+      <View style={styles.boot}>
+        <ActivityIndicator size="large" color="#008267" />
+      </View>
     );
   }
 
-  return React.createElement(
-    QueryClientProvider,
-    { client },
-    React.createElement(
-      SafeAreaProvider,
-      null,
-      React.createElement(
-        View,
-        { style: styles.appRoot },
-        React.createElement(CardapioScreen, null),
-      ),
-      React.createElement(StatusBar, { style: 'dark' }),
-    ),
+  return (
+    <QueryClientProvider client={client}>
+      <SafeAreaProvider>
+        <View style={styles.appRoot}>
+          <CardapioScreen />
+        </View>
+        <StatusBar style="dark" />
+      </SafeAreaProvider>
+    </QueryClientProvider>
   );
 }
 

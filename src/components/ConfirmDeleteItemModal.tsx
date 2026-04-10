@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+
 import { deleteCatalogItem } from '../api/deleteCatalogItem';
 import type { CatalogItem } from '../api/types';
 import { colors, fonts } from '../constants/theme';
@@ -12,11 +13,9 @@ type Props = {
   item: CatalogItem | null;
   categoryId: string | null;
   onClose: () => void;
-  /** Chamado após exclusão bem-sucedida (ex.: fechar detalhe do mesmo item). */
   onDeleted?: (itemId: string) => void;
 };
 
-/** Confirmação de exclusão no mesmo chrome de {@link ProductDetailModal}. */
 export function ConfirmDeleteItemModal({
   visible,
   item,
@@ -49,84 +48,61 @@ export function ConfirmDeleteItemModal({
   const open = visible && item != null && categoryId != null;
   const itemName = item?.name ?? '';
 
-  return React.createElement(
-    Modal,
-    {
-      visible: open,
-      transparent: true,
-      animationType: 'fade' as const,
-      onRequestClose: onClose,
-    },
-    React.createElement(
-      View,
-      { style: styles.centerWrap },
-      React.createElement(Pressable, {
-        style: StyleSheet.absoluteFill,
-        onPress: onClose,
-        accessibilityLabel: 'Fechar ao tocar fora',
-      }),
-      React.createElement(
-        View,
-        { style: styles.modalFrame, accessibilityLabel: 'Confirmar exclusão' },
-        React.createElement(
-          View,
-          { style: styles.modalInner },
-          React.createElement(
-            Pressable,
-            {
-              onPress: onClose,
-              style: styles.closeBtn,
-              hitSlop: 12,
-              accessibilityLabel: 'Fechar',
-              disabled: mutation.isPending,
-            },
-            React.createElement(Ionicons, {
-              name: 'close',
-              size: 22,
-              color: colors.primaryGreen,
-            }),
-          ),
-          React.createElement(Text, { style: styles.title }, 'Excluir item?'),
-          React.createElement(
-            Text,
-            { style: styles.message },
-            `Deseja excluir “${itemName}”? Esta ação não pode ser desfeita.`,
-          ),
-          apiError ? React.createElement(Text, { style: styles.errorText }, apiError) : null,
-          React.createElement(
-            View,
-            { style: styles.actionsRow },
-            React.createElement(
-              Pressable,
-              {
-                style: [styles.ctaOutline, mutation.isPending ? styles.ctaDisabled : null],
-                onPress: onClose,
-                disabled: mutation.isPending,
-                accessibilityLabel: 'Cancelar exclusão',
-              },
-              React.createElement(Text, { style: styles.ctaOutlineText }, 'Cancelar'),
-            ),
-            React.createElement(
-              Pressable,
-              {
-                style: [styles.ctaDanger, mutation.isPending ? styles.ctaDisabled : null],
-                onPress: () => {
+  return (
+    <Modal visible={open} transparent animationType="fade" onRequestClose={onClose}>
+      <View style={styles.centerWrap}>
+        <Pressable
+          style={StyleSheet.absoluteFill}
+          onPress={onClose}
+          accessibilityLabel="Fechar ao tocar fora"
+        />
+        <View style={styles.modalFrame} accessibilityLabel="Confirmar exclusão">
+          <View style={styles.modalInner}>
+            <Pressable
+              onPress={onClose}
+              style={styles.closeBtn}
+              hitSlop={12}
+              accessibilityLabel="Fechar"
+              disabled={mutation.isPending}
+            >
+              <Ionicons name="close" size={22} color={colors.primaryGreen} />
+            </Pressable>
+            <Text style={styles.title}>Excluir item?</Text>
+            <Text style={styles.message}>
+              {`Deseja excluir “${itemName}”? Esta ação não pode ser desfeita.`}
+            </Text>
+            {apiError ? <Text style={styles.errorText}>{apiError}</Text> : null}
+            <View style={styles.actionsRow}>
+              <Pressable
+                style={[styles.ctaOutline, mutation.isPending ? styles.ctaDisabled : null]}
+                onPress={onClose}
+                disabled={mutation.isPending}
+                accessibilityLabel="Cancelar exclusão"
+              >
+                <Text style={styles.ctaOutlineText}>Cancelar</Text>
+              </Pressable>
+              <Pressable
+                style={[styles.ctaDanger, mutation.isPending ? styles.ctaDisabled : null]}
+                onPress={() => {
                   if (!item || !categoryId) {
                     return;
                   }
                   mutation.mutate({ categoryId, itemId: item.id });
-                },
-                disabled: mutation.isPending,
-                accessibilityLabel: 'Confirmar exclusão',
-              },
-              mutation.isPending
-                ? React.createElement(ActivityIndicator, { color: colors.white })
-                : React.createElement(Text, { style: styles.ctaDangerText }, 'Excluir'),
-            ),
-          ),
-        ),
-      ),
-    ),
+                }}
+                disabled={mutation.isPending}
+                accessibilityLabel="Confirmar exclusão"
+              >
+                {mutation.isPending ? (
+                  <ActivityIndicator color={colors.white} />
+                ) : (
+                  <Text style={styles.ctaDangerText}>Excluir</Text>
+                )}
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </View>
+    </Modal>
   );
 }
 
@@ -151,7 +127,7 @@ const styles = StyleSheet.create({
     paddingTop: 24,
     paddingHorizontal: 20,
     paddingBottom: 20,
-    overflow: 'hidden' as const,
+    overflow: 'hidden',
   },
   closeBtn: {
     position: 'absolute',
@@ -167,7 +143,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '700',
     color: colors.primaryGreen,
-    textAlign: 'center' as const,
+    textAlign: 'center',
   },
   message: {
     fontFamily: fonts.medium,
@@ -176,7 +152,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
     color: colors.darkGray,
-    textAlign: 'center' as const,
+    textAlign: 'center',
     lineHeight: 20,
   },
   errorText: {

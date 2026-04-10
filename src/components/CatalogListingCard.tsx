@@ -1,5 +1,6 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+
 import { colors, fonts, layout } from '../constants/theme';
 
 export type CatalogListingCardProps = {
@@ -9,10 +10,6 @@ export type CatalogListingCardProps = {
   onPress: () => void;
 };
 
-/**
- * Linha de listagem inspirada no frame "Card" do Figma (histórico), adaptada ao nosso domínio:
- * só nome, descrição e preço do item de catálogo — sem datas nem movimentações.
- */
 export function CatalogListingCard({
   name,
   price,
@@ -21,36 +18,28 @@ export function CatalogListingCard({
 }: CatalogListingCardProps): React.ReactElement {
   const caption = description.trim();
 
-  return React.createElement(
-    Pressable,
-    {
-      onPress,
-      style: styles.pressable,
-      accessibilityRole: 'button',
-      accessibilityLabel: `${name}, ${price}`,
-    },
-    React.createElement(
-      View,
-      { style: styles.inner },
-      React.createElement(
-        View,
-        { style: styles.nameRow },
-        React.createElement(
-          Text,
-          { style: styles.name, numberOfLines: 2 },
-          name,
-        ),
-        React.createElement(Text, { style: styles.price }, price),
-      ),
-      caption.length > 0
-        ? React.createElement(
-            Text,
-            { style: styles.caption, numberOfLines: 2 },
-            caption,
-          )
-        : null,
-      React.createElement(View, { style: styles.divider }),
-    ),
+  return (
+    <Pressable
+      onPress={onPress}
+      style={styles.pressable}
+      accessibilityRole="button"
+      accessibilityLabel={`${name}, ${price}`}
+    >
+      <View style={styles.inner}>
+        <View style={styles.nameRow}>
+          <Text style={styles.name} numberOfLines={2}>
+            {name}
+          </Text>
+          <Text style={styles.price}>{price}</Text>
+        </View>
+        {caption.length > 0 ? (
+          <Text style={styles.caption} numberOfLines={2}>
+            {caption}
+          </Text>
+        ) : null}
+        <View style={styles.divider} />
+      </View>
+    </Pressable>
   );
 }
 

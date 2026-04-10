@@ -13,6 +13,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
+
 import { updateCatalogItem } from '../api/updateCatalogItem';
 import type { CatalogItem } from '../api/types';
 import { colors, fonts } from '../constants/theme';
@@ -26,7 +27,6 @@ type Props = {
   onClose: () => void;
 };
 
-/** Modal de edição no mesmo chrome de {@link ProductDetailModal} / {@link AddItemBottomSheet}. */
 export function EditItemModal({
   visible,
   item,
@@ -112,119 +112,103 @@ export function EditItemModal({
     });
   };
 
-  return React.createElement(
-    Modal,
-    {
-      visible: visible && item != null && categoryId != null,
-      transparent: true,
-      animationType: 'fade' as const,
-      onRequestClose: onClose,
-    },
-    React.createElement(
-      View,
-      { style: styles.centerWrap },
-      React.createElement(Pressable, {
-        style: StyleSheet.absoluteFill,
-        onPress: onClose,
-        accessibilityLabel: 'Fechar ao tocar fora',
-      }),
-      React.createElement(
-        KeyboardAvoidingView,
-        {
-          behavior: Platform.OS === 'ios' ? 'padding' : undefined,
-          style: styles.keyboardWrap,
-        },
-        React.createElement(
-          View,
-          { style: styles.modalFrame, accessibilityLabel: 'Editar item' },
-          React.createElement(
-            View,
-            { style: styles.modalInner },
-            React.createElement(
-              Pressable,
-              {
-                onPress: onClose,
-                style: styles.closeBtn,
-                hitSlop: 12,
-                accessibilityLabel: 'Fechar',
-              },
-              React.createElement(Ionicons, {
-                name: 'close',
-                size: 22,
-                color: colors.primaryGreen,
-              }),
-            ),
-            React.createElement(Text, { style: styles.title }, 'Editar item'),
-            React.createElement(
-              ScrollView,
-              {
-                style: styles.formScroll,
-                keyboardShouldPersistTaps: 'handled' as const,
-                contentContainerStyle: styles.formContent,
-                showsVerticalScrollIndicator: false,
-              },
-              React.createElement(Text, { style: styles.label }, 'Nome'),
-              React.createElement(TextInput, {
-                style: styles.input,
-                value: name,
-                onChangeText: (t: string) => {
-                  setName(t);
-                  setNameError(null);
-                },
-                placeholder: 'Nome do item',
-                placeholderTextColor: colors.darkGray,
-              }),
-              nameError ? React.createElement(Text, { style: styles.fieldError }, nameError) : null,
-              React.createElement(Text, { style: styles.label }, 'Descrição (opcional)'),
-              React.createElement(TextInput, {
-                style: [styles.input, styles.inputMultiline],
-                value: description,
-                onChangeText: setDescription,
-                placeholder: 'Ingredientes ou detalhes',
-                placeholderTextColor: colors.darkGray,
-                multiline: true,
-                textAlignVertical: 'top' as const,
-              }),
-              React.createElement(Text, { style: styles.label }, 'Preço (R$)'),
-              React.createElement(TextInput, {
-                style: styles.input,
-                value: priceText,
-                onChangeText: (t: string) => {
-                  setPriceText(t);
-                  setPriceError(null);
-                },
-                placeholder: 'Ex.: 42,00',
-                placeholderTextColor: colors.darkGray,
-                keyboardType: 'decimal-pad' as const,
-              }),
-              priceError ? React.createElement(Text, { style: styles.fieldError }, priceError) : null,
-              React.createElement(Text, { style: styles.label }, 'URL da imagem (opcional)'),
-              React.createElement(TextInput, {
-                style: styles.input,
-                value: imageUrl,
-                onChangeText: setImageUrl,
-                placeholder: 'https://…',
-                placeholderTextColor: colors.darkGray,
-                autoCapitalize: 'none' as const,
-                autoCorrect: false,
-              }),
-              apiError ? React.createElement(Text, { style: styles.errorText }, apiError) : null,
-            ),
-            React.createElement(
-              Pressable,
-              {
-                style: [styles.cta, mutation.isPending ? styles.ctaDisabled : null],
-                onPress: handleSubmit,
-                disabled: mutation.isPending,
-              },
-              mutation.isPending
-                ? React.createElement(ActivityIndicator, { color: colors.white })
-                : React.createElement(Text, { style: styles.ctaText }, 'Finalizar edição'),
-            ),
-          ),
-        ),
-      ),
-    ),
+  return (
+    <Modal
+      visible={visible && item != null && categoryId != null}
+      transparent
+      animationType="fade"
+      onRequestClose={onClose}
+    >
+      <View style={styles.centerWrap}>
+        <Pressable
+          style={StyleSheet.absoluteFill}
+          onPress={onClose}
+          accessibilityLabel="Fechar ao tocar fora"
+        />
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          style={styles.keyboardWrap}
+        >
+          <View style={styles.modalFrame} accessibilityLabel="Editar item">
+            <View style={styles.modalInner}>
+              <Pressable
+                onPress={onClose}
+                style={styles.closeBtn}
+                hitSlop={12}
+                accessibilityLabel="Fechar"
+              >
+                <Ionicons name="close" size={22} color={colors.primaryGreen} />
+              </Pressable>
+              <Text style={styles.title}>Editar item</Text>
+              <ScrollView
+                style={styles.formScroll}
+                keyboardShouldPersistTaps="handled"
+                contentContainerStyle={styles.formContent}
+                showsVerticalScrollIndicator={false}
+              >
+                <Text style={styles.label}>Nome</Text>
+                <TextInput
+                  style={styles.input}
+                  value={name}
+                  onChangeText={(t: string) => {
+                    setName(t);
+                    setNameError(null);
+                  }}
+                  placeholder="Nome do item"
+                  placeholderTextColor={colors.darkGray}
+                />
+                {nameError ? <Text style={styles.fieldError}>{nameError}</Text> : null}
+                <Text style={styles.label}>Descrição (opcional)</Text>
+                <TextInput
+                  style={[styles.input, styles.inputMultiline]}
+                  value={description}
+                  onChangeText={setDescription}
+                  placeholder="Ingredientes ou detalhes"
+                  placeholderTextColor={colors.darkGray}
+                  multiline
+                  textAlignVertical="top"
+                />
+                <Text style={styles.label}>Preço (R$)</Text>
+                <TextInput
+                  style={styles.input}
+                  value={priceText}
+                  onChangeText={(t: string) => {
+                    setPriceText(t);
+                    setPriceError(null);
+                  }}
+                  placeholder="Ex.: 42,00"
+                  placeholderTextColor={colors.darkGray}
+                  keyboardType="decimal-pad"
+                />
+                {priceError ? <Text style={styles.fieldError}>{priceError}</Text> : null}
+                <Text style={styles.label}>URL da imagem (opcional)</Text>
+                <TextInput
+                  style={styles.input}
+                  value={imageUrl}
+                  onChangeText={setImageUrl}
+                  placeholder="https://…"
+                  placeholderTextColor={colors.darkGray}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                />
+                {apiError ? <Text style={styles.errorText}>{apiError}</Text> : null}
+              </ScrollView>
+              <Pressable
+                style={[styles.cta, mutation.isPending ? styles.ctaDisabled : null]}
+                onPress={handleSubmit}
+                disabled={mutation.isPending}
+              >
+                {mutation.isPending ? (
+                  <ActivityIndicator color={colors.white} />
+                ) : (
+                  <Text style={styles.ctaText}>Finalizar edição</Text>
+                )}
+              </Pressable>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </View>
+    </Modal>
   );
 }
 
@@ -254,7 +238,7 @@ const styles = StyleSheet.create({
     paddingTop: 24,
     paddingHorizontal: 20,
     paddingBottom: 20,
-    overflow: 'hidden' as const,
+    overflow: 'hidden',
   },
   closeBtn: {
     position: 'absolute',

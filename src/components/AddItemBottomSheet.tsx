@@ -13,6 +13,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
+
 import { addCatalogItem } from '../api/addCatalogItem';
 import type { CatalogCategory } from '../api/types';
 import { colors, fonts } from '../constants/theme';
@@ -25,7 +26,6 @@ type Props = {
   onClose: () => void;
 };
 
-/** Formulário de novo item no mesmo chrome visual de {@link ProductDetailModal}. */
 export function AddItemBottomSheet({
   visible,
   categories,
@@ -114,150 +114,121 @@ export function AddItemBottomSheet({
     });
   };
 
-  return React.createElement(
-    Modal,
-    {
-      visible,
-      transparent: true,
-      animationType: 'fade' as const,
-      onRequestClose: onClose,
-    },
-    React.createElement(
-      View,
-      { style: styles.centerWrap },
-      React.createElement(Pressable, {
-        style: StyleSheet.absoluteFill,
-        onPress: onClose,
-        accessibilityLabel: 'Fechar ao tocar fora',
-      }),
-      React.createElement(
-        KeyboardAvoidingView,
-        {
-          behavior: Platform.OS === 'ios' ? 'padding' : undefined,
-          style: styles.keyboardWrap,
-        },
-        React.createElement(
-          View,
-          { style: styles.modalFrame, accessibilityLabel: 'Novo item' },
-          React.createElement(
-            View,
-            { style: styles.modalInner },
-            React.createElement(
-              Pressable,
-              {
-                onPress: onClose,
-                style: styles.closeBtn,
-                hitSlop: 12,
-                accessibilityLabel: 'Fechar',
-              },
-            React.createElement(Ionicons, {
-              name: 'close',
-              size: 22,
-              color: colors.primaryGreen,
-            }),
-          ),
-          React.createElement(Text, { style: styles.title }, 'Novo item'),
-          React.createElement(
-            ScrollView,
-            {
-              style: styles.formScroll,
-              keyboardShouldPersistTaps: 'handled' as const,
-              contentContainerStyle: styles.formContent,
-              showsVerticalScrollIndicator: false,
-            },
-            React.createElement(Text, { style: styles.label }, 'Categoria'),
-            React.createElement(
-              View,
-              { style: styles.chipsRow },
-              ...categories.map((c) =>
-                React.createElement(
-                  Pressable,
-                  {
-                    key: c.id,
-                    onPress: () => {
-                      setCategoryId(c.id);
-                      setCategoryError(null);
-                    },
-                    style: [styles.chip, categoryId === c.id ? styles.chipActive : null],
-                  },
-                  React.createElement(
-                    Text,
-                    {
-                      style: [
-                        styles.chipText,
-                        categoryId === c.id ? styles.chipTextActive : null,
-                      ],
-                    },
-                    c.label,
-                  ),
-                ),
-              ),
-            ),
-            categoryError
-              ? React.createElement(Text, { style: styles.fieldError }, categoryError)
-              : null,
-            React.createElement(Text, { style: styles.label }, 'Nome'),
-            React.createElement(TextInput, {
-              style: styles.input,
-              value: name,
-              onChangeText: (t: string) => {
-                setName(t);
-                setNameError(null);
-              },
-              placeholder: 'Ex.: Marguerita',
-              placeholderTextColor: colors.darkGray,
-            }),
-            nameError ? React.createElement(Text, { style: styles.fieldError }, nameError) : null,
-            React.createElement(Text, { style: styles.label }, 'Descrição (opcional)'),
-            React.createElement(TextInput, {
-              style: [styles.input, styles.inputMultiline],
-              value: description,
-              onChangeText: setDescription,
-              placeholder: 'Ingredientes ou detalhes',
-              placeholderTextColor: colors.darkGray,
-              multiline: true,
-              textAlignVertical: 'top' as const,
-            }),
-            React.createElement(Text, { style: styles.label }, 'Preço (R$)'),
-            React.createElement(TextInput, {
-              style: styles.input,
-              value: priceText,
-              onChangeText: (t: string) => {
-                setPriceText(t);
-                setPriceError(null);
-              },
-              placeholder: 'Ex.: 42,00',
-              placeholderTextColor: colors.darkGray,
-              keyboardType: 'decimal-pad' as const,
-            }),
-            priceError ? React.createElement(Text, { style: styles.fieldError }, priceError) : null,
-            React.createElement(Text, { style: styles.label }, 'URL da imagem (opcional)'),
-            React.createElement(TextInput, {
-              style: styles.input,
-              value: imageUrl,
-              onChangeText: setImageUrl,
-              placeholder: 'https://…',
-              placeholderTextColor: colors.darkGray,
-              autoCapitalize: 'none' as const,
-              autoCorrect: false,
-            }),
-            apiError ? React.createElement(Text, { style: styles.errorText }, apiError) : null,
-          ),
-          React.createElement(
-            Pressable,
-            {
-              style: [styles.cta, mutation.isPending ? styles.ctaDisabled : null],
-              onPress: handleSubmit,
-              disabled: mutation.isPending,
-            },
-            mutation.isPending
-              ? React.createElement(ActivityIndicator, { color: colors.white })
-              : React.createElement(Text, { style: styles.ctaText }, 'Cadastrar item'),
-          ),
-          ),
-        ),
-      ),
-    )
+  return (
+    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
+      <View style={styles.centerWrap}>
+        <Pressable
+          style={StyleSheet.absoluteFill}
+          onPress={onClose}
+          accessibilityLabel="Fechar ao tocar fora"
+        />
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          style={styles.keyboardWrap}
+        >
+          <View style={styles.modalFrame} accessibilityLabel="Novo item">
+            <View style={styles.modalInner}>
+              <Pressable
+                onPress={onClose}
+                style={styles.closeBtn}
+                hitSlop={12}
+                accessibilityLabel="Fechar"
+              >
+                <Ionicons name="close" size={22} color={colors.primaryGreen} />
+              </Pressable>
+              <Text style={styles.title}>Novo item</Text>
+              <ScrollView
+                style={styles.formScroll}
+                keyboardShouldPersistTaps="handled"
+                contentContainerStyle={styles.formContent}
+                showsVerticalScrollIndicator={false}
+              >
+                <Text style={styles.label}>Categoria</Text>
+                <View style={styles.chipsRow}>
+                  {categories.map((c) => (
+                    <Pressable
+                      key={c.id}
+                      onPress={() => {
+                        setCategoryId(c.id);
+                        setCategoryError(null);
+                      }}
+                      style={[styles.chip, categoryId === c.id ? styles.chipActive : null]}
+                    >
+                      <Text
+                        style={[
+                          styles.chipText,
+                          categoryId === c.id ? styles.chipTextActive : null,
+                        ]}
+                      >
+                        {c.label}
+                      </Text>
+                    </Pressable>
+                  ))}
+                </View>
+                {categoryError ? <Text style={styles.fieldError}>{categoryError}</Text> : null}
+                <Text style={styles.label}>Nome</Text>
+                <TextInput
+                  style={styles.input}
+                  value={name}
+                  onChangeText={(t: string) => {
+                    setName(t);
+                    setNameError(null);
+                  }}
+                  placeholder="Ex.: Marguerita"
+                  placeholderTextColor={colors.darkGray}
+                />
+                {nameError ? <Text style={styles.fieldError}>{nameError}</Text> : null}
+                <Text style={styles.label}>Descrição (opcional)</Text>
+                <TextInput
+                  style={[styles.input, styles.inputMultiline]}
+                  value={description}
+                  onChangeText={setDescription}
+                  placeholder="Ingredientes ou detalhes"
+                  placeholderTextColor={colors.darkGray}
+                  multiline
+                  textAlignVertical="top"
+                />
+                <Text style={styles.label}>Preço (R$)</Text>
+                <TextInput
+                  style={styles.input}
+                  value={priceText}
+                  onChangeText={(t: string) => {
+                    setPriceText(t);
+                    setPriceError(null);
+                  }}
+                  placeholder="Ex.: 42,00"
+                  placeholderTextColor={colors.darkGray}
+                  keyboardType="decimal-pad"
+                />
+                {priceError ? <Text style={styles.fieldError}>{priceError}</Text> : null}
+                <Text style={styles.label}>URL da imagem (opcional)</Text>
+                <TextInput
+                  style={styles.input}
+                  value={imageUrl}
+                  onChangeText={setImageUrl}
+                  placeholder="https://…"
+                  placeholderTextColor={colors.darkGray}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                />
+                {apiError ? <Text style={styles.errorText}>{apiError}</Text> : null}
+              </ScrollView>
+              <Pressable
+                style={[styles.cta, mutation.isPending ? styles.ctaDisabled : null]}
+                onPress={handleSubmit}
+                disabled={mutation.isPending}
+              >
+                {mutation.isPending ? (
+                  <ActivityIndicator color={colors.white} />
+                ) : (
+                  <Text style={styles.ctaText}>Cadastrar item</Text>
+                )}
+              </Pressable>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </View>
+    </Modal>
   );
 }
 
@@ -274,7 +245,6 @@ const styles = StyleSheet.create({
     maxWidth: 293,
     alignItems: 'stretch',
   },
-  /** Borda como “anel” verde: evita a borda inferior sumir com borderRadius (RN iOS/Android). */
   modalFrame: {
     width: '100%',
     maxWidth: 293,
@@ -288,7 +258,7 @@ const styles = StyleSheet.create({
     paddingTop: 24,
     paddingHorizontal: 20,
     paddingBottom: 20,
-    overflow: 'hidden' as const,
+    overflow: 'hidden',
   },
   closeBtn: {
     position: 'absolute',

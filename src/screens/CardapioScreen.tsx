@@ -1,14 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
-import {
-  ActivityIndicator,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 import { HttpError } from '../api/http';
 import type { CatalogCategory, CatalogItem } from '../api/types';
 import { AddItemBottomSheet } from '../components/AddItemBottomSheet';
@@ -31,38 +25,32 @@ function buildCardapioGrid(
   onBeginEdit: (item: CatalogItem, categoryId: string) => void,
   onBeginDelete: (item: CatalogItem, categoryId: string) => void,
 ): React.ReactNode {
-  return React.createElement(
-    React.Fragment,
-    null,
-    ...categories.flatMap((cat) => {
-      if (cat.items.length === 0) {
-        return [];
-      }
-      const heading = React.createElement(CategoryHeading, {
-        key: `h-${cat.id}`,
-        label: cat.label,
-      });
-      const grid = React.createElement(
-        View,
-        { key: `g-${cat.id}`, style: styles.grid },
-        ...cat.items.map((item) =>
-          React.createElement(
-            View,
-            { key: item.id, style: styles.cell },
-            React.createElement(ItemCard, {
-              name: item.name,
-              price: item.price,
-              description: item.description,
-              imageUrl: item.imageUrl,
-              onPress: () => onSelectItem(item),
-              onEditPress: () => onBeginEdit(item, cat.id),
-              onTrashPress: () => onBeginDelete(item, cat.id),
-            }),
-          ),
-        ),
-      );
-      return [heading, grid];
-    }),
+  return (
+    <>
+      {categories.flatMap((cat) => {
+        if (cat.items.length === 0) {
+          return [];
+        }
+        return [
+          <CategoryHeading key={`h-${cat.id}`} label={cat.label} />,
+          <View key={`g-${cat.id}`} style={styles.grid}>
+            {cat.items.map((item) => (
+              <View key={item.id} style={styles.cell}>
+                <ItemCard
+                  name={item.name}
+                  price={item.price}
+                  description={item.description}
+                  imageUrl={item.imageUrl}
+                  onPress={() => onSelectItem(item)}
+                  onEditPress={() => onBeginEdit(item, cat.id)}
+                  onTrashPress={() => onBeginDelete(item, cat.id)}
+                />
+              </View>
+            ))}
+          </View>,
+        ];
+      })}
+    </>
   );
 }
 
@@ -70,32 +58,28 @@ function buildListingByCategory(
   categories: CatalogCategory[],
   onSelectItem: (item: CatalogItem) => void,
 ): React.ReactNode {
-  return React.createElement(
-    React.Fragment,
-    null,
-    ...categories.flatMap((cat) => {
-      if (cat.items.length === 0) {
-        return [];
-      }
-      const heading = React.createElement(CategoryHeading, {
-        key: `lh-${cat.id}`,
-        label: cat.label,
-      });
-      const list = React.createElement(
-        View,
-        { key: `ll-${cat.id}`, style: styles.listColumn },
-        ...cat.items.map((item) =>
-          React.createElement(CatalogListingCard, {
-            key: item.id,
-            name: item.name,
-            price: item.price,
-            description: item.description,
-            onPress: () => onSelectItem(item),
-          }),
-        ),
-      );
-      return [heading, list];
-    }),
+  return (
+    <>
+      {categories.flatMap((cat) => {
+        if (cat.items.length === 0) {
+          return [];
+        }
+        return [
+          <CategoryHeading key={`lh-${cat.id}`} label={cat.label} />,
+          <View key={`ll-${cat.id}`} style={styles.listColumn}>
+            {cat.items.map((item) => (
+              <CatalogListingCard
+                key={item.id}
+                name={item.name}
+                price={item.price}
+                description={item.description}
+                onPress={() => onSelectItem(item)}
+              />
+            ))}
+          </View>,
+        ];
+      })}
+    </>
   );
 }
 
@@ -124,42 +108,33 @@ export function CardapioScreen(): React.ReactElement {
   let mainContent: React.ReactNode;
 
   if (isPending) {
-    mainContent = React.createElement(
-      View,
-      { style: styles.centered },
-      React.createElement(ActivityIndicator, {
-        size: 'large',
-        color: colors.primaryGreen,
-      }),
+    mainContent = (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color={colors.primaryGreen} />
+      </View>
     );
   } else if (isError) {
     const message = error instanceof Error ? error.message : 'Erro ao carregar';
     const requestUrl =
       error instanceof HttpError && error.requestUrl ? error.requestUrl : null;
-    mainContent = React.createElement(
-      View,
-      { style: styles.centered },
-      React.createElement(Text, { style: styles.errorText }, message),
-      requestUrl
-        ? React.createElement(
-            Text,
-            { style: styles.errorUrl, selectable: true },
-            `Pedido: ${requestUrl}`,
-          )
-        : null,
-      React.createElement(
-        Pressable,
-        { style: styles.retryBtn, onPress: () => refetch() },
-        React.createElement(Text, { style: styles.retryText }, 'Tentar novamente'),
-      ),
+    mainContent = (
+      <View style={styles.centered}>
+        <Text style={styles.errorText}>{message}</Text>
+        {requestUrl ? (
+          <Text style={styles.errorUrl} selectable>
+            {`Pedido: ${requestUrl}`}
+          </Text>
+        ) : null}
+        <Pressable style={styles.retryBtn} onPress={() => refetch()}>
+          <Text style={styles.retryText}>Tentar novamente</Text>
+        </Pressable>
+      </View>
     );
   } else if (isEmpty) {
-    mainContent = React.createElement(
-      Text,
-      { style: styles.emptyText },
-      mainView === 'saldo'
-        ? 'Nenhum item na listagem.'
-        : 'Nenhum item no cardápio.',
+    mainContent = (
+      <Text style={styles.emptyText}>
+        {mainView === 'saldo' ? 'Nenhum item na listagem.' : 'Nenhum item no cardápio.'}
+      </Text>
     );
   } else if (mainView === 'saldo') {
     mainContent = buildListingByCategory(categories, setSelected);
@@ -177,77 +152,65 @@ export function CardapioScreen(): React.ReactElement {
 
   const pageTitle = mainView === 'cardapio' ? 'Cardápio do restaurante' : 'Listagem';
 
-  return React.createElement(
-    View,
-    { style: styles.root },
-    React.createElement(AppHeader, {
-      menuExpanded: sidebarOpen,
-      onMenuPress: () => setSidebarOpen((o) => !o),
-    }),
-    React.createElement(
-      ScrollView,
-      {
-        style: styles.scroll,
-        contentContainerStyle: [
-          styles.scrollContent,
-          { paddingBottom: scrollBottomPad },
-        ],
-      },
-      React.createElement(Text, { style: styles.pageTitle }, pageTitle),
-      mainContent,
-    ),
-    showFab
-      ? React.createElement(
-          Pressable,
-          {
-            style: [styles.fab, { bottom: safeBottom + 28 }],
-            onPress: () => setAddSheetOpen(true),
-            accessibilityLabel: 'Adicionar item ao cardápio',
-            accessibilityRole: 'button' as const,
-          },
-          React.createElement(Ionicons, {
-            name: 'add',
-            size: 30,
-            color: colors.white,
-          }),
-        )
-      : null,
-    React.createElement(MobileSidebar, {
-      open: sidebarOpen,
-      onClose: () => setSidebarOpen(false),
-      /* Espelha front-end-cantina: `(headerClick)` / `(scheduleClick)` no `app.component.html` */
-      onHeaderClick: () => setMainView('cardapio'),
-      onScheduleClick: () => setMainView('saldo'),
-    }),
-    React.createElement(AddItemBottomSheet, {
-      visible: addSheetOpen,
-      categories,
-      onClose: () => setAddSheetOpen(false),
-    }),
-    React.createElement(ProductDetailModal, {
-      visible: selected != null,
-      name: selected?.name ?? '',
-      price: selected?.price ?? '',
-      description: selected?.description ?? '',
-      imageUrl: selected?.imageUrl,
-      onClose: () => setSelected(null),
-    }),
-    React.createElement(EditItemModal, {
-      visible: editing != null,
-      item: editing?.item ?? null,
-      categoryId: editing?.categoryId ?? null,
-      onClose: () => setEditing(null),
-    }),
-    React.createElement(ConfirmDeleteItemModal, {
-      visible: deleting != null,
-      item: deleting?.item ?? null,
-      categoryId: deleting?.categoryId ?? null,
-      onClose: () => setDeleting(null),
-      onDeleted: (itemId: string) => {
-        setSelected((s) => (s?.id === itemId ? null : s));
-        setEditing((e) => (e?.item.id === itemId ? null : e));
-      },
-    }),
+  return (
+    <View style={styles.root}>
+      <AppHeader
+        menuExpanded={sidebarOpen}
+        onMenuPress={() => setSidebarOpen((o) => !o)}
+      />
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={[styles.scrollContent, { paddingBottom: scrollBottomPad }]}
+      >
+        <Text style={styles.pageTitle}>{pageTitle}</Text>
+        {mainContent}
+      </ScrollView>
+      {showFab ? (
+        <Pressable
+          style={[styles.fab, { bottom: safeBottom + 28 }]}
+          onPress={() => setAddSheetOpen(true)}
+          accessibilityLabel="Adicionar item ao cardápio"
+          accessibilityRole="button"
+        >
+          <Ionicons name="add" size={30} color={colors.white} />
+        </Pressable>
+      ) : null}
+      <MobileSidebar
+        open={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        onHeaderClick={() => setMainView('cardapio')}
+        onScheduleClick={() => setMainView('saldo')}
+      />
+      <AddItemBottomSheet
+        visible={addSheetOpen}
+        categories={categories}
+        onClose={() => setAddSheetOpen(false)}
+      />
+      <ProductDetailModal
+        visible={selected != null}
+        name={selected?.name ?? ''}
+        price={selected?.price ?? ''}
+        description={selected?.description ?? ''}
+        imageUrl={selected?.imageUrl}
+        onClose={() => setSelected(null)}
+      />
+      <EditItemModal
+        visible={editing != null}
+        item={editing?.item ?? null}
+        categoryId={editing?.categoryId ?? null}
+        onClose={() => setEditing(null)}
+      />
+      <ConfirmDeleteItemModal
+        visible={deleting != null}
+        item={deleting?.item ?? null}
+        categoryId={deleting?.categoryId ?? null}
+        onClose={() => setDeleting(null)}
+        onDeleted={(itemId: string) => {
+          setSelected((s) => (s?.id === itemId ? null : s));
+          setEditing((e) => (e?.item.id === itemId ? null : e));
+        }}
+      />
+    </View>
   );
 }
 

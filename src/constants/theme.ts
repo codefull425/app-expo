@@ -1,4 +1,3 @@
-/** Alinhado a cantina-app/src/styles.scss */
 export const colors = {
   primaryGreen: '#008267',
   darkGray: '#9d9d9d',
@@ -16,11 +15,9 @@ export const spacing = {
 export const layout = {
   catalogMaxWidth: 372,
   itemCardMaxWidth: 176,
-  /** Altura da faixa do header (abaixo da status bar); com safe area = insetTop + este valor. */
   appHeaderHeight: 48,
 } as const;
 
-/** Nomes registados por @expo-google-fonts/roboto após useFonts */
 export const fonts = {
   regular: 'Roboto_400Regular',
   medium: 'Roboto_500Medium',

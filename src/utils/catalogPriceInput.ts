@@ -16,7 +16,6 @@ export function centsToPriceInput(cents: number): string {
   return (cents / 100).toFixed(2).replace('.', ',');
 }
 
-/** Texto inicial do campo preço no formulário (edição). */
 export function catalogItemInitialPriceText(item: CatalogItem): string {
   if (item.priceCents != null && Number.isFinite(item.priceCents)) {
     return centsToPriceInput(item.priceCents);

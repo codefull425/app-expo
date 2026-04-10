@@ -1,8 +1,3 @@
-/**
- * Pedidos a `/items` (com ou sem `?_=…` de cache-bust) devem ir para `/categories`.
- * Isto tem de correr *antes* de `defaults()` e do `rewriter`: o routes.json com
- * "/items" → "/categories" usa express-urlrewrite e só casa com `/items` exato, não com query.
- */
 const fs = require('fs');
 const path = require('path');
 const jsonServer = require('json-server');

@@ -1,14 +1,8 @@
-/**
- * Cardápio só é montado a partir da resposta HTTP do json-server (sem fallback local).
- * GET explícito em `/categories` (nunca `/items`; ver `http.ts` e `api-server.js`).
- */
 import { normalizeCatalogPath } from './resolveApiBaseUrl';
 import { requestJson } from './http';
 import { mapCategoryDto } from './mappers';
-import { CATALOG_PATH } from './config';
-import type { CatalogCategory, CatalogResponseDto, CategoryDto, ItemDto } from './types';
+import type { CatalogCategory, CatalogResponseDto, CategoryDto } from './types';
 
-/** Aceita `{ "categories": [...] }` ou um array de categorias (ex.: json-server em `/categories`). */
 function normalizeToCategoryDtos(data: unknown): CategoryDto[] {
   if (Array.isArray(data)) {
     return data as CategoryDto[];

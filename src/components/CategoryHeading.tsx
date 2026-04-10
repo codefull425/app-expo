@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+
 import { colors, fonts, layout } from '../constants/theme';
 
 type Props = {
@@ -7,12 +8,12 @@ type Props = {
 };
 
 export function CategoryHeading({ label }: Props): React.ReactElement {
-  return React.createElement(
-    View,
-    { style: styles.row },
-    React.createElement(View, { style: styles.line }),
-    React.createElement(Text, { style: styles.label }, label),
-    React.createElement(View, { style: styles.line }),
+  return (
+    <View style={styles.row}>
+      <View style={styles.line} />
+      <Text style={styles.label}>{label}</Text>
+      <View style={styles.line} />
+    </View>
   );
 }
 

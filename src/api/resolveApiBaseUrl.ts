@@ -3,12 +3,10 @@ import { getExpoGoProjectConfig } from 'expo';
 import { Platform } from 'react-native';
 
 export const JSON_SERVER_DEFAULT_BASE_URL = 'http://localhost:3000';
-/** Lista completa de categorias (json-server). Preferir `/categories`. */
 export const JSON_SERVER_DEFAULT_CATALOG_PATH = '/categories';
 
 const JSON_SERVER_PORT = 3000;
 
-/** No emulador Android, `localhost` / `127.0.0.1` é o próprio emulador; isto aponta para o PC (host). */
 const ANDROID_EMULATOR_LOOPBACK_TO_HOST = '10.0.2.2';
 
 function isLocalLoopbackHost(hostname: string): boolean {
@@ -16,9 +14,6 @@ function isLocalLoopbackHost(hostname: string): boolean {
   return h === 'localhost' || h === '127.0.0.1' || h === '::1' || h === '[::1]';
 }
 
-/**
- * Substitui loopback pelo alias do host no emulador Android (não usar em device físico com IP da LAN).
- */
 function rewriteAndroidEmulatorLoopbackBaseUrl(baseUrl: string): string {
   if (Platform.OS !== 'android') {
     return baseUrl;
@@ -36,10 +31,6 @@ function rewriteAndroidEmulatorLoopbackBaseUrl(baseUrl: string): string {
   }
 }
 
-/**
- * Garante só origem (protocolo + host + porta). Se no .env vier
- * `http://192.168.1.5:3000/categories`, sem isto o fetch viraria `.../categories/categories` → 404.
- */
 export function normalizeApiBaseUrlToOrigin(input: string): string {
   const trimmed = input.trim().replace(/\/+$/, '');
   if (!trimmed) {
@@ -55,7 +46,6 @@ export function normalizeApiBaseUrlToOrigin(input: string): string {
   }
 }
 
-/** Path só com `/` inicial; se vier URL completa no .env, usa só o pathname. */
 export function normalizeCatalogPath(input: string | undefined): string {
   const fallback = JSON_SERVER_DEFAULT_CATALOG_PATH;
   let path: string;
@@ -74,7 +64,6 @@ export function normalizeCatalogPath(input: string | undefined): string {
       path = t.startsWith('/') ? t : `/${t}`;
     }
   }
-  // Cardápio: GET /categories. `/items` (env antigo) ou `?_=` com json-server --routes → 404.
   if (path === '/items' || path.startsWith('/items?') || path.startsWith('/items/')) {
     path = '/categories' + path.slice('/items'.length);
   }
@@ -92,10 +81,6 @@ function isLikelyTunnelOrCloudHost(host: string): boolean {
   );
 }
 
-/**
- * Host utilizável para alcançar o PC na LAN. Aceita IPv4, .local e hostnames simples
- * (ex. DESKTOP-xxx); rejeita domínios típicos de tunnel onde :3000 não chega ao json-server.
- */
 function looksUsableDevHost(host: string): boolean {
   if (!host || host.length === 0) {
     return false;
@@ -115,10 +100,6 @@ function looksUsableDevHost(host: string): boolean {
   return /^[a-zA-Z0-9.-]+$/.test(host);
 }
 
-/**
- * Host do PC onde corre o Metro (mesmo que o Expo Go usa).
- * Assim o json-server em :3000 fica acessível no telemóvel na mesma Wi‑Fi.
- */
 export function getDevMachineHost(): string | null {
   const go = getExpoGoProjectConfig();
   const dbg = go?.debuggerHost;
@@ -144,9 +125,6 @@ export function getDevMachineHost(): string | null {
   return null;
 }
 
-/**
- * Base URL do json-server. Ordem: .env → web localhost → Expo Go / dev client (IP do PC) → localhost.
- */
 export function resolveApiBaseUrl(): string {
   const fromEnv = process.env.EXPO_PUBLIC_API_BASE_URL;
   if (fromEnv != null && fromEnv.trim() !== '') {

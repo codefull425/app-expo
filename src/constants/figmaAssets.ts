@@ -1,6 +1,3 @@
-/**
- * URLs iguais a cantina-app; no dispositivo físico substitua por require() de ficheiros em assets/ ou URLs públicas.
- */
 export const FIGMA_ASSETS = {
   search: 'http://localhost:3845/assets/92c1d0c26b9cbd0feab09dcca01bd7068fc96a49.svg',
   pizza: 'http://localhost:3845/assets/db496637cd753f6bf9b84dd27d1e3e5c011e20e9.svg',

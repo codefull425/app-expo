@@ -15,7 +15,6 @@ export class HttpError extends Error {
 const NETWORK_HINT =
   'Confirme: json-server com --host 0.0.0.0, porta 3000, PC e telemóvel na mesma Wi‑Fi, firewall a permitir a porta.';
 
-/** Cardápio: sempre GET `/categories`. `/items` (env antigo ou cliente legado) → `/categories`. */
 function catalogPathOnly(path: string): string {
   const pathOnly = path.split('?')[0] ?? path;
   const p = pathOnly.startsWith('/') ? pathOnly : `/${pathOnly}`;

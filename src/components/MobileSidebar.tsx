@@ -1,21 +1,11 @@
 import { Image } from 'expo-image';
 import React, { useEffect, useRef } from 'react';
-import {
-  Animated,
-  BackHandler,
-  Platform,
-  Pressable,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { Animated, BackHandler, Platform, Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 import { cardapioWhite, listagem } from '../constants/localImages';
 import { colors, layout } from '../constants/theme';
 
-/**
- * Mesmo padrão do front-end-cantina (`app.component.html` + `SideNavComponent`):
- * cada botão da rail emite um evento dedicado; o shell (ex.: `CardapioScreen`) decide o que renderizar.
- */
 type Props = {
   open: boolean;
   onClose: () => void;
@@ -26,8 +16,6 @@ type Props = {
 const SLIDE_MS = 220;
 const FADE_MS = 200;
 const PANEL_WIDTH = 83;
-
-/** Altura da faixa do header (sem safe area). O `top` real do painel é `insets.top + SIDEBAR_TOP`. */
 const SIDEBAR_TOP = layout.appHeaderHeight;
 
 export function MobileSidebar({
@@ -81,92 +69,66 @@ export function MobileSidebar({
 
   const fire = (handler: () => void) => {
     handler();
-    /* Fechar no tick seguinte evita corrida com hit-testing (web / expo-image). */
     queueMicrotask(() => onClose());
   };
 
-  return React.createElement(
-    View,
-    {
-      style: styles.layer,
-      pointerEvents: 'box-none' as const,
-    },
-    React.createElement(
-      Animated.View,
-      {
-        style: [styles.backdrop, { opacity: fade }],
-        pointerEvents: 'box-none' as const,
-      },
-      React.createElement(Pressable, {
-        style: StyleSheet.absoluteFill,
-        onPress: onClose,
-        accessibilityLabel: 'Fechar menu',
-        accessibilityRole: 'button',
-      }),
-    ),
-    React.createElement(
-      Animated.View,
-      {
-        style: [
+  return (
+    <View style={styles.layer} pointerEvents="box-none">
+      <Animated.View style={[styles.backdrop, { opacity: fade }]} pointerEvents="box-none">
+        <Pressable
+          style={StyleSheet.absoluteFill}
+          onPress={onClose}
+          accessibilityLabel="Fechar menu"
+          accessibilityRole="button"
+        />
+      </Animated.View>
+      <Animated.View
+        style={[
           styles.panel,
           {
             top: sidebarTop,
-            /* bottom: 0 — se usássemos insets.bottom, a faixa da safe area ficava sem rail e o fundo branco do app aparecia por cima visualmente. */
             bottom: 0,
             transform: [{ translateX: slide }],
           },
-        ],
-        accessibilityViewIsModal: true,
-        accessibilityLabel: 'Menu lateral',
-      },
-      React.createElement(
-        View,
-        { style: styles.rail },
-        React.createElement(View, {
-          style: styles.fundo,
-          pointerEvents: 'none' as const,
-        }),
-        React.createElement(View, {
-          style: styles.accent,
-          pointerEvents: 'none' as const,
-        }),
-        React.createElement(
-          View,
-          { style: styles.nav },
-          React.createElement(
-            Pressable,
-            {
-              style: [styles.cell, styles.cellLogo],
-              onPress: () => fire(onHeaderClick),
-              accessibilityLabel: 'Início',
-              accessibilityRole: 'button',
-            },
-            React.createElement(Image, {
-              source: cardapioWhite,
-              style: styles.cellImage,
-              contentFit: 'cover' as const,
-              pointerEvents: 'none' as const,
-            }),
-          ),
-          React.createElement(
-            Pressable,
-            {
-              style: [styles.cell, styles.cellAlunos],
-              onPress: () => fire(onScheduleClick),
-              hitSlop: { top: 8, bottom: 8, left: 4, right: 4 },
-              accessibilityLabel: 'Agenda',
-              accessibilityRole: 'button',
-            },
-            React.createElement(Image, {
-              source: listagem,
-              style: styles.cellImage,
-              contentFit: 'cover' as const,
-              pointerEvents: 'none' as const,
-            }),
-          ),
-        ),
-      ),
-    ),
+        ]}
+        accessibilityViewIsModal
+        accessibilityLabel="Menu lateral"
+      >
+        <View style={styles.rail}>
+          <View style={styles.fundo} pointerEvents="none" />
+          <View style={styles.accent} pointerEvents="none" />
+          <View style={styles.nav}>
+            <Pressable
+              style={[styles.cell, styles.cellLogo]}
+              onPress={() => fire(onHeaderClick)}
+              accessibilityLabel="Início"
+              accessibilityRole="button"
+            >
+              <Image
+                source={cardapioWhite}
+                style={styles.cellImage}
+                contentFit="cover"
+                pointerEvents="none"
+              />
+            </Pressable>
+            <Pressable
+              style={[styles.cell, styles.cellAlunos]}
+              onPress={() => fire(onScheduleClick)}
+              hitSlop={{ top: 8, bottom: 8, left: 4, right: 4 }}
+              accessibilityLabel="Agenda"
+              accessibilityRole="button"
+            >
+              <Image
+                source={listagem}
+                style={styles.cellImage}
+                contentFit="cover"
+                pointerEvents="none"
+              />
+            </Pressable>
+          </View>
+        </View>
+      </Animated.View>
+    </View>
   );
 }
 
@@ -233,7 +195,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     overflow: 'hidden',
   },
-  /** Preenche os 80×80 do botão (com bordas, a área útil fica dentro do Pressable). */
   cellImage: {
     width: '100%',
     height: '100%',

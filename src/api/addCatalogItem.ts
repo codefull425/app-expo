@@ -5,17 +5,11 @@ import type { CategoryDto, ItemDto } from './types';
 export type AddCatalogItemInput = {
   categoryId: string;
   name: string;
-  /** Opcional no formulário; envia string vazia no JSON. */
   description?: string;
-  /** Preço em centavos (inteiro). */
   priceCents: number;
   imageUrl?: string;
 };
 
-/**
- * Lê a categoria, acrescenta um item no formato do `server.json` e grava com PUT
- * (evita merge incorreto de arrays no PATCH do json-server).
- */
 export async function addCatalogItem(input: AddCatalogItemInput): Promise<void> {
   const basePath = normalizeCatalogPath(process.env.EXPO_PUBLIC_API_CATALOG_PATH);
   const prefix = basePath.replace(/\/$/, '') || '/categories';
