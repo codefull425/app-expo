@@ -175,7 +175,7 @@ export function CardapioScreen(): React.ReactElement {
   const safeBottom = Math.max(insets.bottom, 12);
   const scrollBottomPad = 32 + safeBottom + (showFab ? 64 : 0);
 
-  const pageTitle = mainView === 'cardapio' ? 'Cardápio de Ana' : 'Listagem';
+  const pageTitle = mainView === 'cardapio' ? 'Cardápio do restaurante' : 'Listagem';
 
   return React.createElement(
     View,
