@@ -1,0 +1,148 @@
+{
+  "categories": [
+    {
+      "id": "pizzas",
+      "name": "Pizzas",
+      "items": [
+        {
+          "id": "pz1",
+          "name": "Marguerita",
+          "description": "Molho de tomate, mussarela e manjericão fresco.",
+          "price_cents": 4200,
+          "image_url": "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&q=80"
+        },
+        {
+          "id": "pz2",
+          "name": "Calabresa",
+          "description": "Calabresa fatiada, cebola e azeitonas.",
+          "price_cents": 4500,
+          "image_url": "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=400&q=80"
+        },
+        {
+          "id": "pz3",
+          "name": "Quatro queijos",
+          "description": "Mussarela, gorgonzola, parmesão e provolone.",
+          "price_cents": 5200,
+          "image_url": "https://images.unsplash.com/photo-1551782450-a2132b4ba21d?w=400&q=80"
+        },
+        {
+          "id": "pz4",
+          "name": "Portuguesa",
+          "description": "Presunto, ovos, cebola, azeitona e ervilha.",
+          "price_cents": 4800,
+          "image_url": "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&q=80"
+        },
+        {
+          "id": "pz5",
+          "name": "Frango com catupiry",
+          "description": "Frango desfiado e cream cheese.",
+          "price_cents": 4600,
+          "image_url": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&q=80"
+        },
+        {
+          "id": "pz6",
+          "name": "Vegetariana",
+          "description": "Abobrinha, berinjela, pimentão e cogumelos.",
+          "price_cents": 4400,
+          "image_url": "https://images.unsplash.com/photo-1551024506-0bccd828d307?w=400&q=80"
+        }
+      ]
+    },
+    {
+      "id": "lasanha",
+      "name": "Lasanha",
+      "items": [
+        {
+          "id": "ls1",
+          "name": "Lasanha à bolonhesa",
+          "description": "Massa fresca, molho de carne e bechamel gratinada.",
+          "price_cents": 2800,
+          "image_url": "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=400&q=80"
+        },
+        {
+          "id": "ls2",
+          "name": "Lasanha quatro queijos",
+          "description": "Camadas de queijos derretidos e molho branco.",
+          "price_cents": 2600,
+          "image_url": "https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=400&q=80"
+        },
+        {
+          "id": "ls3",
+          "name": "Lasanha de frango",
+          "description": "Frango desfiado ao molho branco.",
+          "price_cents": 2500,
+          "image_url": "https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?w=400&q=80"
+        },
+        {
+          "id": "ls4",
+          "name": "Lasanha vegetariana",
+          "description": "Legumes grelhados e molho de tomate caseiro.",
+          "price_cents": 2400,
+          "image_url": "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=400&q=80"
+        },
+        {
+          "id": "ls5",
+          "name": "Lasanha de espinafre",
+          "description": "Espinafre, ricota e molho bechamel.",
+          "price_cents": 2700,
+          "image_url": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=400&q=80"
+        },
+        {
+          "id": "ls6",
+          "name": "Lasanha de berinjela",
+          "description": "Berinjela grelhada, tomate e parmesão.",
+          "price_cents": 2300,
+          "image_url": "https://images.unsplash.com/photo-1506617420156-8e4536971650?w=400&q=80"
+        }
+      ]
+    },
+    {
+      "id": "bebidas",
+      "name": "Bebidas",
+      "items": [
+        {
+          "id": "bb1",
+          "name": "Água mineral 500 ml",
+          "description": "Sem gás.",
+          "price_cents": 350,
+          "image_url": "https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=400&q=80"
+        },
+        {
+          "id": "bb2",
+          "name": "Refrigerante lata",
+          "description": "Cola, guaraná ou limão — sujeito à disponibilidade.",
+          "price_cents": 600,
+          "image_url": "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?w=400&q=80"
+        },
+        {
+          "id": "bb3",
+          "name": "Suco natural 300 ml",
+          "description": "Laranja, maracujá ou abacaxi.",
+          "price_cents": 800,
+          "image_url": "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=400&q=80"
+        },
+        {
+          "id": "bb4",
+          "name": "Chá gelado",
+          "description": "Chá mate ou pêssego.",
+          "price_cents": 550,
+          "image_url": "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&q=80"
+        },
+        {
+          "id": "bb5",
+          "name": "Café expresso",
+          "description": "Café em cápsula ou filtro.",
+          "price_cents": 400,
+          "image_url": "https://images.unsplash.com/photo-1442512595331-e89e73853f31?w=400&q=80"
+        },
+        {
+          "id": "bb6",
+          "name": "Achocolatado 200 ml",
+          "description": "Leite com chocolate.",
+          "price_cents": 500,
+          "image_url": "https://images.unsplash.com/photo-1527169402691-feff5539e52c?w=400&q=80"
+        }
+      ]
+    }
+  ]
+}
