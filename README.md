@@ -14,7 +14,7 @@ Este repositório contém a **API mock** (json-server) e o **app** React Native 
 
 ## Como rodar a API
 
-A API é um **JSON Server** customizado (`cantina-expo/api-server.js`), que serve o conteúdo de `cantina-expo/server.json` e escuta em todas as interfaces (`0.0.0.0`) na porta **3000** por defeito.
+A API é um **JSON Server** customizado (`cantina-expo/api-server.js`), que serve o conteúdo de `cantina-expo/server.json` e escuta em todas as interfaces (`0.0.0.0`) na porta **3000** .
 
 1. Abra um terminal e entre na pasta do projeto:
 
@@ -53,14 +53,6 @@ Exemplo (PowerShell):
 $env:PORT=4000; npm run api
 ```
 
-### Dados e endpoints úteis
-
-- O “base de dados” é **`cantina-expo/server.json`** (categorias e itens).
-- A app obtém o catálogo com **`GET /categories`** ).
-- **Editar** e **excluir** itens fazem `GET` da categoria, alteram o array `items` em memória e gravam com **`PUT /categories/:id`**, como o json-server espera.
-
----
-
 ## Como rodar a aplicação
 
 Mantenha a **API a correr** noutro terminal (`npm run api` dentro de `cantina-expo`).
@@ -84,13 +76,6 @@ Defina a URL completa da API antes de iniciar o Expo (substitua pelo IP do seu P
 ```powershell
 $env:EXPO_PUBLIC_API_BASE_URL="http://192.168.x.x:3000"; npm start
 ```
-
-Opcionalmente pode definir o caminho do catálogo (por defeito é `/categories`):
-
-```powershell
-$env:EXPO_PUBLIC_API_CATALOG_PATH="/categories"; npm start
-```
-
 ---
 
 ## Funcionalidades: listar, editar e excluir
