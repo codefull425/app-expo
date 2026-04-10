@@ -71,11 +71,8 @@ Mantenha a **API a correr** noutro terminal (`npm run api` dentro de `cantina-ex
 
 ### Se o telemóvel não ligar à API
 
-Defina a URL completa da API antes de iniciar o Expo (substitua pelo IP do seu PC):
-
-```powershell
-$env:EXPO_PUBLIC_API_BASE_URL="http://192.168.x.x:3000"; npm start
-```
+**Descubra o IPv4 do PC**
+**Monte a URL** com esse valor e a porta da API (por exemplo: **3000**): `http://<IPv4>:3000`
 ---
 
 ## Funcionalidades: listar, editar e excluir
